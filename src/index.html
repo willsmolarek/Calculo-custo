@@ -10,10 +10,10 @@
   <h1>Controle de Custos</h1>
 
   <section>
-    <h2>Produto</h2>
+    <h2>Produto ou Serviço</h2>
 
     <label>
-      Nome:
+      Nome: (nome do produto ou serviço)
       <input id="nome" type="text" />
     </label>
 
@@ -23,12 +23,12 @@
     </label>
 
     <label>
-      Quantidade total:
+      Quantidade total: (em unidades, gramas, ml, etc.)
       <input id="quantidadeTotal" type="number" />
     </label>
 
     <label>
-      Unidade:
+      Unidade: (g, kg, ml, un, etc.)
       <select id="unidade">
         <option value="g">gramas</option>
         <option value="kg">kilos</option>
@@ -43,12 +43,12 @@
     <h2>Consumo</h2>
 
     <label>
-      Quantidade por uso:
+      Quantidade por uso: (o valor deve ser na mesma unidade da quantidade total. ex: se a quantidade total é em KG e voce usa 200g por vez, coloque 0.2)
       <input id="quantidadePorUso" type="number" />
     </label>
 
     <label>
-      Tipo de consumo:
+      Tipo de consumo: (diário ou mensal)
       <select id="tipoConsumo">
         <option value="dia">Usos por dia</option>
         <option value="mes">Usos por mês</option>
@@ -56,7 +56,7 @@
     </label>
 
     <label>
-      Quantidade de usos:
+      Quantidade de usos: (quantas vezes voce usa por dia ou por mês)
       <input id="usos" type="number" />
     </label>
   </section>
