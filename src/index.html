@@ -2,90 +2,118 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Controle de Custos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Lucro e Custo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
-<body>
+<body class="bg-[#f8fafc] text-slate-900 min-h-screen">
 
-  <h1>Controle de Custos</h1>
+  <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 h-16 flex items-center shadow-sm">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="bg-indigo-600 p-1.5 rounded-lg text-white">📈</div>
+        <span class="font-black text-lg tracking-tight">SmartCost <span class="text-indigo-600">Pro</span></span>
+      </div>
+    </div>
+  </nav>
 
-  <section>
-    <h2>Produto ou Serviço</h2>
+  <main class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class="grid lg:grid-cols-12 gap-8">
+      
+      <div class="lg:col-span-7 space-y-6">
+        <section class="bg-white p-6 rounded-[24px] shadow-sm border border-slate-100">
+          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">📦 Produto ou Insumo</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="text-xs font-bold text-slate-400 uppercase ml-1">Nome do Item</label>
+              <input id="nome" type="text" placeholder="Ex: Barril de Chopp 20L" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500 outline-none transition-all" />
+            </div>
 
-    <label>
-      Nome: (nome do produto ou serviço)
-      <input id="nome" type="text" />
-    </label>
+            <div>
+              <label class="text-xs font-bold text-slate-400 uppercase ml-1">Preço Pago (R$)</label>
+              <input id="preco" type="number" step="0.01" placeholder="0,00" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500 outline-none" />
+            </div>
 
-    <label>
-      Preço total (R$):
-      <input id="preco" type="number" step="0.01" />
-    </label>
+            <div>
+              <label class="text-xs font-bold text-slate-400 uppercase ml-1 tracking-wider">Preço de Venda (R$)</label>
+              <input id="precoVenda" type="number" step="0.01" placeholder="Ex: 15,00" class="w-full px-4 py-2.5 bg-emerald-50 border border-emerald-100 rounded-xl focus:border-emerald-500 outline-none font-bold text-emerald-700" />
+            </div>
 
-    <label>
-      Quantidade total: (em unidades, gramas, ml, etc.)
-      <input id="quantidadeTotal" type="number" />
-    </label>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-xs font-bold text-slate-400 uppercase ml-1">Qtd Total</label>
+                <input id="quantidadeTotal" type="number" placeholder="20" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500 outline-none" />
+              </div>
+              <div>
+                <label class="text-xs font-bold text-slate-400 uppercase ml-1">Unidade</label>
+                <select id="unidade" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none">
+                  <option value="ml">ml/L</option>
+                  <option value="kg">g/kg</option>
+                  <option value="un">un</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    <label>
-      Unidade: (g, kg, ml, un, etc.)
-      <select id="unidade">
-        <option value="g">gramas</option>
-        <option value="kg">kilos</option>
-        <option value="ml">ml</option>
-        <option value="mg">mg</option>
-        <option value="un">Unidade</option>
-      </select>
-    </label>
-  </section>
+        <section class="bg-white p-6 rounded-[24px] shadow-sm border border-slate-100">
+          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800">🥤 Dose / Uso Unitário</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-xs font-bold text-slate-400 uppercase ml-1">Qtd por Uso</label>
+              <div class="flex gap-2">
+                <input id="quantidadePorUso" type="number" placeholder="Ex: 300" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500 outline-none" />
+                <select id="unidadeUso" class="px-2 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm">
+                    <option value="base">ml/g/un</option>
+                    <option value="kilo">L/kg</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-400 uppercase ml-1">Frequência</label>
+              <div class="flex gap-2">
+                <input id="usos" type="number" placeholder="1" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-indigo-500 outline-none" />
+                <select id="tipoConsumo" class="px-2 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm">
+                  <option value="dia">/ dia</option>
+                  <option value="mes">/ mês</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  <section>
-    <h2>Consumo</h2>
+        <div class="flex gap-3">
+          <button id="calcular" class="flex-1 bg-indigo-600 text-white font-bold py-3.5 rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">Simular Custos</button>
+          <button id="salvar" class="px-6 bg-emerald-500 text-white font-bold py-3.5 rounded-2xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200">Salvar</button>
+        </div>
+      </div>
 
-    <label>
-      Quantidade por uso: (o valor deve ser na mesma unidade da quantidade total. ex: se a quantidade total é em KG e voce usa 200g por vez, coloque 0.2)
-      <input id="quantidadePorUso" type="number" />
-    </label>
+      <div class="lg:col-span-5 space-y-6">
+        <div id="resultado" class="bg-slate-900 text-white p-8 rounded-[32px] shadow-xl min-h-[300px] relative overflow-hidden">
+          <p class="text-slate-400 text-center mt-20">Aguardando dados para calcular...</p>
+        </div>
 
-    <label>
-      Tipo de consumo: (diário ou mensal)
-      <select id="tipoConsumo">
-        <option value="dia">Usos por dia</option>
-        <option value="mes">Usos por mês</option>
-      </select>
-    </label>
-
-    <label>
-      Quantidade de usos: (quantas vezes voce usa por dia ou por mês)
-      <input id="usos" type="number" />
-    </label>
-  </section>
-
-  <!-- BOTÕES -->
-  <div class="acoes">
-    <button id="calcular">Calcular</button>
-    <button id="salvar">Salvar</button>
-  </div>
-
-  <!-- RESULTADO -->
-  <section id="resultado" class="resultado">
-    <p>Preencha os dados e clique em <strong>Calcular</strong>.</p>
-  </section>
-
-  <!-- TABELA -->
-  <section>
-    <h2>Itens Salvos</h2>
-    <table id="tabela">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Custo Diário</th>
-          <th>Custo Mensal</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
+        <section class="bg-white p-6 rounded-[24px] shadow-sm border border-slate-100">
+          <h2 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Itens Salvos</h2>
+          <div class="overflow-x-auto">
+            <table id="tabela" class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b border-slate-100">
+                  <th class="pb-3 font-bold text-slate-600">Item</th>
+                  <th class="pb-3 font-bold text-slate-600 text-right">Mês</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-50"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
 
   <script src="index.js"></script>
 </body>
