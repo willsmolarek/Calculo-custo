@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "ESNext", // Mude de CommonJS para ESNext
-    "lib": ["DOM", "ESNext"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "module": "ES6",  /* Altere de "CommonJS" para "ES6" */
+    "lib": ["DOM", "ES6"],
+    "strict": true
   }
 }
