@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+var _a;
 function converterParaBase(qtd, unidade) {
     switch (unidade.toLowerCase()) {
         case "kg":
@@ -79,5 +79,4 @@ function calcular() {
   `;
 }
 // Escuta o clique no botão
-document.getElementById("calcular")?.addEventListener("click", calcular);
-//# sourceMappingURL=index.js.map
+(_a = document.getElementById("calcular")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", calcular);
