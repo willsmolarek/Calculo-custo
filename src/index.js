@@ -1,115 +1,80 @@
-var STORAGE_KEY = "controle-custos";
-// =======================
-// CONVERSÃO
-// =======================
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function converterParaBase(qtd, unidade) {
-    switch (unidade) {
+    switch (unidade.toLowerCase()) {
         case "kg":
+        case "l":
             return qtd * 1000;
-        case "g":
-        case "ml":
-        case "un":
         default:
             return qtd;
     }
 }
-// =======================
-// CÁLCULOS DE CUSTO
-// =======================
-function custoPorUnidade(produto) {
-    var base = converterParaBase(produto.quantidadeTotal, produto.unidade);
-    return produto.precoTotal / base;
+function calcular() {
+    const salarioInput = document.getElementById("salario");
+    const nomeInput = document.getElementById("nome");
+    const precoInput = document.getElementById("preco");
+    const qtdTotalInput = document.getElementById("quantidadeTotal");
+    const unidadeSelect = document.getElementById("unidade");
+    const qtdUsoInput = document.getElementById("quantidadePorUso");
+    const usosInput = document.getElementById("usos");
+    const resDiv = document.getElementById("resultado");
+    if (!resDiv)
+        return;
+    const salario = Number(salarioInput.value) || 0;
+    const nome = nomeInput.value || "Produto";
+    const preco = Number(precoInput.value) || 0;
+    const qtdTotal = Number(qtdTotalInput.value) || 1;
+    const unidade = unidadeSelect.value;
+    const qtdUso = Number(qtdUsoInput.value) || 0;
+    const usosDia = Number(usosInput.value) || 0;
+    // Cálculos
+    const baseTotal = converterParaBase(qtdTotal, unidade);
+    const precoUnitario = preco / baseTotal;
+    const custoPorUso = precoUnitario * qtdUso;
+    const custoMensal = custoPorUso * usosDia * 30;
+    const duracaoDias = usosDia > 0 && qtdUso > 0 ? baseTotal / (qtdUso * usosDia) : 0;
+    const impactoSalarial = salario > 0 ? (custoMensal / salario) * 100 : 0;
+    resDiv.classList.remove("hidden");
+    resDiv.innerHTML = `
+    <div class="bg-slate-900 rounded-[32px] p-8 text-white relative overflow-hidden shadow-2xl">
+        <div class="relative z-10 text-center">
+            <div class="flex justify-between items-center mb-6">
+                <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-emerald-500/30">Análise Financeira</span>
+                <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">${nome}</span>
+            </div>
+            
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Custo Total Mensal</p>
+            <h2 class="text-5xl font-black text-white leading-none tracking-tight mb-2">
+                R$ ${custoMensal.toFixed(2)}
+            </h2>
+            
+            ${salario > 0 ? `
+              <p class="text-emerald-400 text-sm font-bold mb-8">
+                Consome ${impactoSalarial.toFixed(2)}% do seu salário
+              </p>
+            ` : '<div class="mb-8"></div>'}
+
+            <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/10 text-left">
+                <div class="bg-white/5 p-4 rounded-2xl">
+                    <p class="text-slate-500 text-[10px] uppercase font-black mb-1">Custo por Uso</p>
+                    <p class="text-lg font-bold text-indigo-300 text-white">R$ ${custoPorUso.toFixed(2)}</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl">
+                    <p class="text-slate-500 text-[10px] uppercase font-black mb-1">Duração</p>
+                    <p class="text-lg font-bold text-white">${duracaoDias.toFixed(0)} dias</p>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-indigo-600/20 rounded-2xl border border-indigo-500/30 flex items-center gap-3">
+                <span class="text-xl">💡</span>
+                <p class="text-[11px] text-slate-300 text-left leading-relaxed">
+                    Cada vez que você usa este item, ele te custa <strong>R$ ${custoPorUso.toFixed(2)}</strong>. No ano, isso será <strong>R$ ${(custoMensal * 12).toFixed(2)}</strong>.
+                </p>
+            </div>
+        </div>
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl"></div>
+    </div>
+  `;
 }
-function custoPorUso(produto, consumo) {
-    return custoPorUnidade(produto) * consumo.quantidadePorUso;
-}
-function custoDiario(produto, consumo) {
-    return custoPorUso(produto, consumo) * consumo.usosPorDia;
-}
-function custoMensal(produto, consumo) {
-    return custoDiario(produto, consumo) * 30;
-}
-// =======================
-// MÉTRICAS
-// =======================
-function usosTotais(produto, consumo) {
-    var base = converterParaBase(produto.quantidadeTotal, produto.unidade);
-    return base / consumo.quantidadePorUso;
-}
-function diasDeDuracao(produto, consumo) {
-    return usosTotais(produto, consumo) / consumo.usosPorDia;
-}
-function usosPorMes(consumo) {
-    return consumo.usosPorDia * 30;
-}
-function produtosPorMes(produto, consumo) {
-    return 30 / diasDeDuracao(produto, consumo);
-}
-// =======================
-// STORAGE
-// =======================
-function carregarLista() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-}
-function salvarNaLista(dados) {
-    var lista = carregarLista();
-    lista.push(dados);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
-}
-// =======================
-// DOM
-// =======================
-var resultado = document.getElementById("resultado");
-function lerProduto() {
-    return {
-        nome: document.getElementById("nome").value,
-        precoTotal: Number(document.getElementById("preco").value),
-        quantidadeTotal: Number(document.getElementById("quantidadeTotal").value),
-        unidade: document.getElementById("unidade").value,
-    };
-}
-function lerConsumo() {
-    var quantidadePorUso = Number(document.getElementById("quantidadePorUso").value);
-    var tipoConsumo = document.getElementById("tipoConsumo").value;
-    var usos = Number(document.getElementById("usos").value);
-    var usosPorDia = tipoConsumo === "mes"
-        ? usos / 30
-        : usos;
-    return {
-        quantidadePorUso: quantidadePorUso,
-        usosPorDia: usosPorDia,
-    };
-}
-function mostrarResultado(produto, consumo) {
-    var diario = custoDiario(produto, consumo);
-    var mensal = custoMensal(produto, consumo);
-    var unidadeLabel = produto.unidade === "un"
-        ? "unidade(s)"
-        : produto.unidade;
-    resultado.innerHTML = "\n    <div style=\"display:flex; flex-direction:column; gap:10px;\">\n      \n      <div>\n        <strong style=\"font-size:18px;\">".concat(produto.nome, "</strong>\n        <span style=\"color:#555; font-size:13px;\">\n          (").concat(unidadeLabel, ")\n        </span>\n      </div>\n\n      <hr/>\n\n      <div>\n        <strong>\uD83D\uDCB0 Custos</strong><br/>\n        \u2022 Custo por uso: <strong>R$ ").concat(custoPorUso(produto, consumo).toFixed(2), "</strong><br/>\n        \u2022 Custo di\u00E1rio: <strong>R$ ").concat(diario.toFixed(2), "</strong><br/>\n        \u2022 Custo mensal: <strong>R$ ").concat(mensal.toFixed(2), "</strong>\n      </div>\n\n      <div>\n        <strong>\uD83D\uDCE6 Consumo</strong><br/>\n        \u2022 Usos totais do produto: <strong>").concat(usosTotais(produto, consumo).toFixed(0), "</strong><br/>\n        \u2022 Dura\u00E7\u00E3o estimada: <strong>").concat(diasDeDuracao(produto, consumo).toFixed(1), " dias</strong><br/>\n        \u2022 Usos por m\u00EAs (estimado): <strong>").concat(usosPorMes(consumo).toFixed(0), "</strong><br/>\n        \u2022 Produtos consumidos por m\u00EAs: <strong>").concat(produtosPorMes(produto, consumo).toFixed(2), "</strong>\n      </div>\n\n    </div>\n  ");
-}
-function renderTabela() {
-    var tbody = document.querySelector("#tabela tbody");
-    var lista = carregarLista();
-    tbody.innerHTML = "";
-    lista.forEach(function (_a) {
-        var produto = _a.produto, consumo = _a.consumo;
-        tbody.innerHTML += "\n      <tr>\n        <td>".concat(produto.nome, "</td>\n        <td>R$ ").concat(custoDiario(produto, consumo).toFixed(2), "</td>\n        <td>R$ ").concat(custoMensal(produto, consumo).toFixed(2), "</td>\n      </tr>\n    ");
-    });
-}
-// =======================
-// EVENTOS
-// =======================
-document.getElementById("calcular")
-    .addEventListener("click", function () {
-    mostrarResultado(lerProduto(), lerConsumo());
-});
-document.getElementById("salvar")
-    .addEventListener("click", function () {
-    salvarNaLista({ produto: lerProduto(), consumo: lerConsumo() });
-    renderTabela();
-});
-// =======================
-// INIT
-// =======================
-renderTabela();
+document.getElementById("calcular")?.addEventListener("click", calcular);
+//# sourceMappingURL=index.js.map
