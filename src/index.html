@@ -31,7 +31,7 @@
 
       <div class="space-y-4">
         <div class="relative">
-          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 block">O que você comprou?</label>
+          <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 block text-indigo-400">O que você comprou?</label>
           <input id="nome" type="text" placeholder="Ex: Carne, Arroz, Sabão" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all">
         </div>
 
@@ -43,8 +43,8 @@
           <div>
             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 block">Qtd do Pacote</label>
             <div class="flex bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
-              <input id="quantidadeTotal" type="number" placeholder="1" class="w-full p-4 bg-transparent outline-none">
-              <select id="unidade" class="bg-slate-100 px-2 font-bold text-[10px] outline-none cursor-pointer uppercase">
+              <input id="quantidadeTotal" type="number" placeholder="1" class="w-full p-4 bg-transparent outline-none w-1/2">
+              <select id="unidade" class="bg-slate-100 px-2 font-bold text-[10px] outline-none cursor-pointer uppercase w-1/2">
                 <option value="kg">kg</option>
                 <option value="g">g</option>
                 <option value="l">L</option>
@@ -59,7 +59,7 @@
       <div class="bg-indigo-50/50 p-6 rounded-[32px] space-y-4 border border-indigo-100/50">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="text-[10px] font-bold text-indigo-400 ml-1 mb-1 block uppercase">Uso por vez (g/ml)</label>
+            <label class="text-[10px] font-bold text-indigo-400 ml-1 mb-1 block uppercase">Uso por vez (g/ml/un)</label>
             <input id="quantidadePorUso" type="number" placeholder="Ex: 400" class="w-full p-4 bg-white border border-indigo-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
           </div>
           <div>
@@ -73,7 +73,7 @@
         <i data-lucide="zap" class="w-5 h-5"></i> Calcular Impacto
       </button>
 
-      <div id="resultado" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500"></div>
+      <div id="resultado"></div>
 
     </div>
   </div>
