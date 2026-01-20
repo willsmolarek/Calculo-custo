@@ -1,62 +1,95 @@
 type Unidade = "kg" | "g" | "ml" | "l" | "un";
 
-interface Produto {
-  nome: string;
-  precoTotal: number;
-  quantidadeTotal: number;
-  unidade: Unidade;
-}
+// =======================
+// LÓGICA DE CONVERSÃO
+// =======================
 
-const STORAGE_KEY = "custos-domesticos";
-
-// Converte tudo para uma base comum para o cálculo não errar
+// Esta função resolve o erro 2304
 function converterParaBase(qtd: number, unidade: Unidade): number {
   switch (unidade.toLowerCase()) {
     case "kg":
     case "l":
-      return qtd * 1000; // Transforma quilo em grama, litro em ml
+      return qtd * 1000; // Converte quilo/litro para grama/ml
     default:
       return qtd;
   }
 }
 
-function calcular() {
-  const nome = (document.getElementById("nome") as HTMLInputElement).value;
-  const preco = Number((document.getElementById("preco") as HTMLInputElement).value);
-  const qtdTotalInput = Number((document.getElementById("quantidadeTotal") as HTMLInputElement).value);
-  const unidade = (document.getElementById("unidade") as HTMLSelectElement).value as Unidade;
-  
-  const qtdUso = Number((document.getElementById("quantidadePorUso") as HTMLInputElement).value);
-  const usosDia = Number((document.getElementById("usos") as HTMLInputElement).value);
+// =======================
+// FUNÇÃO PRINCIPAL
+// =======================
 
-  // Lógica Matemática Pura:
-  // 1. Achar o preço de 1g ou 1ml
-  const baseTotal = converterParaBase(qtdTotalInput, unidade);
+function calcular(): void {
+  // Captura dos elementos do DOM
+  const nomeInput = document.getElementById("nome") as HTMLInputElement;
+  const precoInput = document.getElementById("preco") as HTMLInputElement;
+  const qtdTotalInput = document.getElementById("quantidadeTotal") as HTMLInputElement;
+  const unidadeSelect = document.getElementById("unidade") as HTMLSelectElement;
+  const qtdUsoInput = document.getElementById("quantidadePorUso") as HTMLInputElement;
+  const usosInput = document.getElementById("usos") as HTMLInputElement;
+  const resDiv = document.getElementById("resultado");
+
+  if (!resDiv) return;
+
+  // Valores numéricos
+  const nome = nomeInput.value || "Produto";
+  const preco = Number(precoInput.value) || 0;
+  const qtdTotal = Number(qtdTotalInput.value) || 1;
+  const unidade = unidadeSelect.value as Unidade;
+  const qtdUso = Number(qtdUsoInput.value) || 0;
+  const usosDia = Number(usosInput.value) || 0;
+
+  // Cálculos
+  const baseTotal = converterParaBase(qtdTotal, unidade);
   const precoUnitario = preco / baseTotal;
 
-  // 2. Multiplicar pelo que você usa
   const custoPorUso = precoUnitario * qtdUso;
   const custoDiario = custoPorUso * usosDia;
   const custoMensal = custoDiario * 30;
+  const duracaoDias = usosDia > 0 && qtdUso > 0 ? baseTotal / (qtdUso * usosDia) : 0;
 
-  // 3. Ver quanto tempo dura o pacote
-  const duracaoDias = baseTotal / (qtdUso * usosDia);
+  // Renderização do Resultado "Premium"
+  resDiv.classList.remove("hidden");
+  resDiv.innerHTML = `
+    <div class="bg-slate-900 rounded-[32px] p-8 text-white relative overflow-hidden shadow-2xl">
+        <div class="relative z-10">
+            <div class="flex justify-between items-center mb-6">
+                <span class="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-emerald-500/30 text-white">Relatório de Gasto</span>
+                <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">${nome}</span>
+            </div>
+            
+            <div class="mb-8">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">Impacto Diário no Bolso</p>
+                <h2 class="text-5xl font-black text-white leading-none tracking-tight">
+                    R$ ${custoDiario.toFixed(2)}
+                </h2>
+            </div>
 
-  const display = document.getElementById("resultado")!;
-  display.innerHTML = `
-    <div class="space-y-4">
-      <h2 class="text-xl font-bold text-indigo-600">${nome || 'Produto'}</h2>
-      <hr class="border-slate-100">
-      <div class="grid grid-cols-1 gap-3">
-        <p class="text-slate-700">💰 Custo por Refeição/Uso: <strong>R$ ${custoPorUso.toFixed(2)}</strong></p>
-        <p class="text-slate-700 font-bold text-lg">📅 Custo Diário: <span class="text-emerald-600">R$ ${custoDiario.toFixed(2)}</span></p>
-        <p class="text-slate-700">🗓️ Custo Mensal: <strong>R$ ${custoMensal.toFixed(2)}</strong></p>
-      </div>
-      <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 mt-4">
-        <p class="text-blue-800 text-sm italic">O estoque de ${qtdTotalInput}${unidade} vai durar aprox. <strong>${duracaoDias.toFixed(0)} dias</strong>.</p>
-      </div>
+            <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
+                <div>
+                    <p class="text-slate-500 text-[10px] uppercase font-black mb-1">Total no Mês</p>
+                    <p class="text-xl font-bold text-white">R$ ${custoMensal.toFixed(2)}</p>
+                </div>
+                <div>
+                    <p class="text-slate-500 text-[10px] uppercase font-black mb-1">Duração do Item</p>
+                    <p class="text-xl font-bold text-indigo-400">${duracaoDias.toFixed(0)} dias</p>
+                </div>
+            </div>
+
+            <div class="mt-8 flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10">
+                <div class="text-2xl">💡</div>
+                <p class="text-[11px] text-slate-300 leading-relaxed">
+                    Cada <strong>uso individual</strong> custa aproximadamente <strong>R$ ${custoPorUso.toFixed(2)}</strong>.
+                </p>
+            </div>
+        </div>
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl"></div>
     </div>
   `;
 }
+
+// =======================
+// INICIALIZAÇÃO
+// =======================
 
 document.getElementById("calcular")?.addEventListener("click", calcular);
