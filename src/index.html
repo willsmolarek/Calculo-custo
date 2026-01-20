@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartConsumption</title>
+  <title>SmartCost Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 <body class="bg-[#f0f2f5] text-slate-900 min-h-screen flex items-center justify-center p-4">
 
   <div class="w-full max-w-lg">
-    <div class="bg-white/70 backdrop-blur-xl rounded-[40px] shadow-2xl shadow-indigo-100 border border-white p-8 md:p-10 space-y-8">
+    <div class="bg-white/70 backdrop-blur-xl rounded-[40px] shadow-2xl shadow-indigo-100 border border-white p-8 md:p-10 space-y-6">
       
       <div class="flex items-center gap-4 mb-2">
         <div class="bg-indigo-600 p-3 rounded-2xl shadow-lg shadow-indigo-200 text-white">
@@ -20,8 +20,13 @@
         </div>
         <div>
           <h1 class="text-2xl font-black tracking-tight">Smart<span class="text-indigo-600">Cost</span></h1>
-          <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Calculadora de Consumo</p>
+          <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Gestão de Consumo Real</p>
         </div>
+      </div>
+
+      <div class="p-4 bg-emerald-50 rounded-[24px] border border-emerald-100">
+        <label class="text-[10px] font-black text-emerald-600 uppercase tracking-widest ml-1 mb-1 block">Sua Renda Mensal (R$)</label>
+        <input id="salario" type="number" placeholder="Ex: 3000" class="w-full bg-transparent border-none outline-none font-bold text-emerald-700 placeholder:text-emerald-300 text-lg">
       </div>
 
       <div class="space-y-4">
@@ -33,13 +38,13 @@
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 block">Preço Total (R$)</label>
-            <input id="preco" type="number" placeholder="0,00" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all">
+            <input id="preco" type="number" placeholder="0,00" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
           </div>
           <div>
             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 block">Qtd do Pacote</label>
             <div class="flex bg-slate-50 border border-slate-100 rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
               <input id="quantidadeTotal" type="number" placeholder="1" class="w-full p-4 bg-transparent outline-none">
-              <select id="unidade" class="bg-slate-100 px-3 font-bold text-xs outline-none cursor-pointer">
+              <select id="unidade" class="bg-slate-100 px-2 font-bold text-[10px] outline-none cursor-pointer uppercase">
                 <option value="kg">kg</option>
                 <option value="g">g</option>
                 <option value="l">L</option>
@@ -51,18 +56,14 @@
         </div>
       </div>
 
-      <div class="bg-indigo-50/50 p-6 rounded-[32px] space-y-4">
-        <div class="flex items-center gap-2 mb-2">
-            <i data-lucide="refresh-cw" class="text-indigo-500 w-4 h-4"></i>
-            <h2 class="text-xs font-black text-indigo-900 uppercase tracking-widest">Uso Diário</h2>
-        </div>
+      <div class="bg-indigo-50/50 p-6 rounded-[32px] space-y-4 border border-indigo-100/50">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="text-[10px] font-bold text-indigo-400 ml-1 mb-1 block">Gasta por vez (g/ml)</label>
+            <label class="text-[10px] font-bold text-indigo-400 ml-1 mb-1 block uppercase">Uso por vez (g/ml)</label>
             <input id="quantidadePorUso" type="number" placeholder="Ex: 400" class="w-full p-4 bg-white border border-indigo-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
           </div>
           <div>
-            <label class="text-[10px] font-bold text-indigo-400 ml-1 mb-1 block">Vezes ao dia</label>
+            <label class="text-[10px] font-bold text-indigo-400 ml-1 mb-1 block uppercase">Vezes ao dia</label>
             <input id="usos" type="number" value="1" class="w-full p-4 bg-white border border-indigo-100 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
           </div>
         </div>
@@ -72,8 +73,7 @@
         <i data-lucide="zap" class="w-5 h-5"></i> Calcular Impacto
       </button>
 
-      <div id="resultado" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-        </div>
+      <div id="resultado" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500"></div>
 
     </div>
   </div>
